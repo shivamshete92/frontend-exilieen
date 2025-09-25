@@ -20,17 +20,17 @@ jobs:
         with:
           node-version: '18'
 
-      # 3. Install dependencies (inside frontend folder)
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
         working-directory: ./frontend
 
-      # 4. Build project
+      # 4. Build Vite project
       - name: Build project
         run: npm run build
         working-directory: ./frontend
 
-      # 5. Deploy build folder to EC2
+      # 5. Deploy dist folder to EC2
       - name: Deploy to EC2
         env:
           SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
@@ -46,8 +46,8 @@ jobs:
           echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-          # Copy build folder from ./frontend/build to EC2 target path
-          rsync -avz --delete ./frontend/build/ ${EC2_USER}@${EC2_HOST}:${TARGET_PATH}
+          # Copy dist folder instead of build
+          rsync -avz --delete ./frontend/dist/ ${EC2_USER}@${EC2_HOST}:${TARGET_PATH}
 
           # Reload nginx on EC2
           ssh ${EC2_USER}@${EC2_HOST} << 'EOF'
