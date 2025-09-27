@@ -70,12 +70,11 @@ const Contact = () => {
     setStatus("Sending...");
     try {
       // --- THIS IS THE UPDATED LINE ---
-    const response = await fetch("http://13.62.101.151:5000/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
+    const response = await fetch("http://13.62.101.151:5000/api/contact", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(formData),
+});
       const data = await response.json();
       if (data.success) {
         setStatus("✅ Message sent successfully!");
